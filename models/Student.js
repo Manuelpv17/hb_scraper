@@ -7,7 +7,7 @@ const studentSchema = new Schema({
   cohort: String,
   github: String,
   status: String,
-  reviews: [{ type: Types.ObjectId }],
+  reviews: [{ type: Types.ObjectId, ref: "Review" }],
 });
 
 module.exports = model("Student", studentSchema);
