@@ -3,6 +3,8 @@ const Review = require("./models/Review");
 const Student = require("./models/Student");
 const Project = require("./models/Project");
 
+console.log("hello");
+
 const scrape = async function scraping() {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
@@ -70,6 +72,7 @@ async function students(browser) {
 
   for (let i = 0; i < students.length; i++) {
     const { name, id, github, city, cohort, status } = students[i];
+    console.log("student: ", name);
     const updatedStudent = await Student.findOneAndUpdate(
       { id: id },
       { name, id, github, city, cohort, status },
@@ -94,16 +97,18 @@ async function reviews(browser) {
   await page.setDefaultNavigationTimeout(0);
 
   const cohorts = [
-    "https://intranet.hbtn.io/batches/22", //ch 9
-    "https://intranet.hbtn.io/batches/27", //ch 10
-    "https://intranet.hbtn.io/batches/35", //ch 11
-    "https://intranet.hbtn.io/batches/45", //ch 12
-    "https://intranet.hbtn.io/batches/59", //ch 13
     "https://intranet.hbtn.io/batches/80", //ch 14
+    "https://intranet.hbtn.io/batches/59", //ch 13
+    "https://intranet.hbtn.io/batches/45", //ch 12
+    "https://intranet.hbtn.io/batches/35", //ch 11
+    "https://intranet.hbtn.io/batches/27", //ch 10
+    "https://intranet.hbtn.io/batches/22", //ch 9
   ];
 
   //go to the cohort projects
   for (let ch = 0; ch < cohorts.length; ch++) {
+    console.log("cohort: ", cohorts[ch]);
+
     await page.goto(cohorts[ch]);
 
     const cohort_projects = await page.evaluate(() => {
@@ -121,6 +126,8 @@ async function reviews(browser) {
 
     //go to the project
     for (let ch_p = 0; ch_p < cohort_projects.length; ch_p++) {
+      console.log("Project: ", cohort_projects[ch_p]);
+
       await page.goto(cohort_projects[ch_p]);
       await page.waitForSelector("#qa-reviews");
 

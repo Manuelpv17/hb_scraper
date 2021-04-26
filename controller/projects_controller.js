@@ -19,7 +19,9 @@ projectsCrl.getProject = async (req, res) => {
     path: "reviews",
     select: "-__v -_id -project_id",
   });
-  res.status(200).json(project);
+  if (project) res.status(200).json(project);
+  else
+    res.status(404).json({ message: `Project '${req.params.id}' not found` });
 };
 
 module.exports = projectsCrl;

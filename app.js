@@ -4,7 +4,7 @@ var CronJob = require("cron").CronJob;
 
 require("./database");
 
-const job = new CronJob("42 00 03 * * *", function () {
+const job = new CronJob("42 00 12 * * *", function () {
   require("./hb_scraper");
 });
 job.start();

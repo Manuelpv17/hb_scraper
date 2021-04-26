@@ -11,7 +11,11 @@ studentsCrl.getAllStudents = async (req, res) => {
       },
       { _id: 0, __v: 0 }
     ).populate({ path: "reviews", select: "-__v -_id -student_id" });
-    res.status(200).json(students);
+    if (students.length) res.status(200).json(students);
+    else
+      res
+        .status(404)
+        .json({ message: `Cohort '${req.query.cohort}' not found` });
   } else {
     const students = await Student.find({}, { _id: 0, __v: 0 }).populate({
       path: "reviews",
@@ -26,7 +30,9 @@ studentsCrl.getStudent = async (req, res) => {
     { id: req.params.id },
     { _id: 0, __v: 0 }
   ).populate({ path: "reviews", select: "-__v -_id -student_id" });
-  res.status(200).json(student);
+  if (student) res.status(200).json(student);
+  else
+    res.status(404).json({ message: `Student '${req.params.id}' not found` });
 };
 
 module.exports = studentsCrl;
